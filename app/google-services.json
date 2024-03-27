@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "441197342993",
+    "project_id": "finwise-2004d",
+    "storage_bucket": "finwise-2004d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441197342993:android:ff2ed6922d27e8ded99cb0",
+        "android_client_info": {
+          "package_name": "com.example.finwise_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvVZ-0uLZldcKBP9WQsYgvzsLypq799iU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441197342993:android:860439d345a053c2d99cb0",
+        "android_client_info": {
+          "package_name": "com.example.finwiselogin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvVZ-0uLZldcKBP9WQsYgvzsLypq799iU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

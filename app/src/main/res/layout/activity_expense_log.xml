@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".expense_log">
+
+    <LinearLayout
+        android:id="@+id/headADD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/royalpurple"
+        android:padding="30dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/headingExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Expense "
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:paddingRight="8dp"
+            android:background="@color/royalpurple" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/amountLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headADD"
+        android:orientation="vertical"
+        android:paddingHorizontal="30dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/textAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter Amount"
+            android:textStyle="bold"
+            android:textColor="@color/royalpurple"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/editAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_editor"
+            android:padding="10dp"
+            android:layout_marginTop="8dp"
+            android:inputType="numberDecimal" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textSelectCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Category"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/royalpurple"
+        android:layout_below="@id/amountLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/buttonSelectCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click to add"
+        android:textColor="@color/white"
+        android:layout_below="@id/textSelectCategory"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/royalpurple" />
+
+    <LinearLayout
+        android:id="@+id/categoryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonSelectCategory"
+        android:orientation="horizontal"
+        android:paddingHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/selectedCategoryIcon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/coin"
+            android:contentDescription="Selected Category"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/selectedCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Category Selected"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textSelectDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/royalpurple"
+        android:layout_below="@id/categoryLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textSelectDate"
+        android:paddingHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:hint="Select Date">
+
+        <EditText
+            android:id="@+id/editDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_editor"
+            android:padding="10dp"
+            android:inputType="none"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Select Date" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/royalpurple"
+        android:layout_marginBottom="100dp" />
+</RelativeLayout>
