@@ -60,8 +60,12 @@ class ExpenseActivity : Fragment() {
 
     private fun retrieveAndDisplayExpenseData() {
         val currentUserUid = firebaseAuth.currentUser?.uid ?: return
-        expensesCollection.whereEqualTo("UserID", currentUserUid)
-            .get()
+        val currentUser = firebaseAuth.currentUser
+        val userName = currentUser?.displayName ?: ""
+        val userExpenseRef = db.collection("Expense").document(currentUserUid)
+            .collection(userName)
+
+        userExpenseRef.get()
             .addOnSuccessListener { documents ->
                 val expenseList = mutableListOf<Expense>()
                 var totalSpending = 0.0

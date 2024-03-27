@@ -53,7 +53,7 @@ class expense_log : AppCompatActivity() {
     private var selectedCategory = "Food"
 
     private val db = FirebaseFirestore.getInstance()
-    private val expensesCollection = db.collection("expense_log")
+    private val expensesCollection = db.collection("Expense")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,9 +84,7 @@ class expense_log : AppCompatActivity() {
             val expenseData = hashMapOf<String, Any>(
                 "Category" to selectedCategory, // Use selected category
                 "Date" to date,
-                "ExpenseAmt" to amount,
-                "UserID" to currentUserUid,
-                "u_name" to userName
+                "ExpenseAmt" to amount
             )
 
             // Save data to Firestore
@@ -104,20 +102,24 @@ class expense_log : AppCompatActivity() {
 
 
     private fun saveExpenseData(expenseData: HashMap<String, Any>) {
-        val db = FirebaseFirestore.getInstance()
-        val expenseLogCollection = db.collection("expense_log")
+        val currentUserUid = firebaseAuth.currentUser?.uid ?: return
+        val currentUser = firebaseAuth.currentUser
+        val userName = currentUser?.displayName ?: ""
 
-        expenseLogCollection.add(expenseData)
-            .addOnSuccessListener { documentReference ->
-                println("DocumentSnapshot added with ID: ${documentReference.id}")
-                // Handle success, if needed
+        // Reference to the user's document in the database
+        val userExpenseRef = db.collection("Expense").document(currentUserUid).collection(userName).document()
+
+        userExpenseRef.set(expenseData)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Expense data saved successfully")
                 navigateBackToExpenseScreen()
             }
             .addOnFailureListener { e ->
-                println("Error adding document: $e")
+                Log.e("Firestore", "Error adding expense data", e)
                 // Handle failure, if needed
             }
     }
+
     private fun setupDatePicker() {
         Log.d("DatePicker", "Setting up date picker") // Add this line
         editDate.setOnClickListener {
