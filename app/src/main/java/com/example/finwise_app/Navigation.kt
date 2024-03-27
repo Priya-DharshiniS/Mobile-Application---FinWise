@@ -39,10 +39,10 @@ class Navigation : AppCompatActivity() {
 //                    true
 //                }
 //
-//                R.id.nav_remainder -> {
-//                    loadFragment(RemainderFragment(), supportFragmentManager)
-//                    true
-//                }
+               R.id.nav_remainder -> {
+                   loadFragment(reminder_log(), supportFragmentManager)
+                    true
+                }
 //
                 R.id.nav_profile -> {
                     loadFragment(profile(), supportFragmentManager)

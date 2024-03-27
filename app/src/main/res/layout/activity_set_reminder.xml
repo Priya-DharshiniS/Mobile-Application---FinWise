@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SetReminder">
+
+    <TextView
+        android:id="@+id/setReminderTextView"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/royalpurple"
+        android:padding="12dp"
+        android:text="Set Reminder"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        android:textStyle="bold" />
+
+    <!-- Date -->
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setReminderTextView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Date"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/dateEditText"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setReminderTextView"
+        android:layout_toRightOf="@id/dateTextView"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:textColor="@color/black"
+        android:inputType="date"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateEditText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Time"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/timeEditText"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateEditText"
+        android:layout_toRightOf="@id/timeTextView"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:textColor="@color/black"
+        android:inputType="time"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <!-- Label -->
+    <TextView
+        android:id="@+id/labelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeEditText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Label"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/labelEditText"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeEditText"
+        android:layout_toRightOf="@id/labelTextView"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="90dp"
+        android:textColor="@color/black"
+        android:background="@drawable/custom_editor"
+        android:padding="8dp"/>
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/labelEditText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Description"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/descriptionEditText"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/labelEditText"
+        android:layout_toRightOf="@id/descriptionTextView"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="40dp"
+        android:textColor="@color/black"
+        android:background="@drawable/custom_editor"
+        android:padding="8dp"/>
+
+    <!-- Set Button -->
+    <Button
+        android:id="@+id/setButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/descriptionEditText"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="150dp"
+        android:backgroundTint="@color/royalpurple"
+        android:text="Set"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+</RelativeLayout>

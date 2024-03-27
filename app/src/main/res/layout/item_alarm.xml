@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <!-- Alarm Icon -->
+    <ImageView
+        android:id="@+id/alarmIcon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_alarm"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Alarm Text Box -->
+    <LinearLayout
+        android:id="@+id/alarmTextBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/alarmIcon"
+        android:background="@drawable/edge"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/alarmTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alarm"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/alarmDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set your alarm"
+            android:textSize="16sp"
+            android:textColor="@android:color/black" />
+
+        <android.widget.Switch
+            android:id="@+id/alarmSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="end"
+            android:thumbTint="@color/purple"
+            android:trackTint="@color/pink" />
+    </LinearLayout>
+</RelativeLayout>

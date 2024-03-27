@@ -13,6 +13,12 @@
         android:theme="@style/Theme.FinWise_App"
         tools:targetApi="31">
         <activity
+            android:name=".SetReminder"
+            android:exported="false" />
+        <activity
+            android:name=".reminder_log"
+            android:exported="false" />
+        <activity
             android:name=".profile"
             android:exported="false" />
         <activity
