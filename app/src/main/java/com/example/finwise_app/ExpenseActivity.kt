@@ -197,7 +197,7 @@ class ExpenseActivity : Fragment() {
             "Appliances" -> R.drawable.home_appliance
             "Investment" -> R.drawable.invest_icon
             "Loan" -> R.drawable.loan_icon
-            else -> null // Default icon
+            else -> R.drawable.coin // Default icon
         }
     }
 

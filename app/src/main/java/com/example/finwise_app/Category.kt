@@ -3,15 +3,17 @@ package com.example.finwise_app
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Category(val name: String, val imageResource: Int) : Parcelable {
+data class Category(val name: String, val imageResource: Int, val userId: String) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
-        parcel.readInt()
+        parcel.readInt(),
+        parcel.readString()!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeInt(imageResource)
+        parcel.writeString(userId)
     }
 
     override fun describeContents(): Int {

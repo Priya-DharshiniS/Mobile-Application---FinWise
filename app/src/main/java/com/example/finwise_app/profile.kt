@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
+import android.widget.Toast
 
 
 
@@ -21,7 +22,6 @@ class profile : Fragment() {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var currentUser: FirebaseUser
-    private lateinit var uname: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +50,7 @@ class profile : Fragment() {
             val savings = income - budget
             totalSavingsEditText.setText(savings.toString())
             // Call function to update Firestore
-            updateFinanceData(income, budget, savings, uname)
+            updateFinanceData(income, budget, savings)
         }
 
         return view
@@ -100,25 +100,7 @@ class profile : Fragment() {
             }
     }
 
-    private fun updateFinanceData(income: Double, budget: Double, savings: Double, uname: String) {
-        val userDocRef = firestore.collection("users").document(currentUser.uid)
-
-        // Update the uname field within the document
-        userDocRef.update("uname", uname)
-            .addOnSuccessListener {
-                Log.d(TAG, "Username updated successfully")
-                // After updating the uname field, you can proceed to update the finance data
-                updateFinanceDataHelper(income, budget, savings)
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Error updating username", e)
-                // Handle the failure to update the username
-            }
-    }
-
-    private fun updateFinanceDataHelper(income: Double, budget: Double, savings: Double) {
-
-
+    private fun updateFinanceData(income: Double, budget: Double, savings: Double) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR).toString()
         val month = SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.time)
@@ -184,5 +166,6 @@ class profile : Fragment() {
     companion object {
         private const val TAG = "ProfileFragment"
     }
+
 
 }
