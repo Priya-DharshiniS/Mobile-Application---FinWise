@@ -64,6 +64,9 @@ class SetReminder : AppCompatActivity() {
             }, year, month, day
         )
 
+        // Set minimum date to today
+        datePicker.datePicker.minDate = System.currentTimeMillis()
+
         datePicker.show()
     }
 
@@ -86,7 +89,9 @@ class SetReminder : AppCompatActivity() {
     }
 
     private fun saveReminderToFirestore() {
-        val date = dateEditText.text.toString().trim()
+        // You can perform validation here if necessary
+
+        // Continue with saving the reminder to Firestore
         val time = timeEditText.text.toString().trim()
         val label = labelEditText.text.toString().trim()
         val description = descriptionEditText.text.toString().trim()
@@ -98,7 +103,7 @@ class SetReminder : AppCompatActivity() {
 
         if (userId != null && userName != null) {
             val reminder = hashMapOf(
-                "Date" to date,
+                "Date" to dateEditText.text.toString().trim(),
                 "Time" to time,
                 "Label" to label,
                 "Description" to description
@@ -122,7 +127,4 @@ class SetReminder : AppCompatActivity() {
             Toast.makeText(this, "User not authenticated!", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
 }

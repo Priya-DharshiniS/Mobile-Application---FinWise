@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import android.widget.TextView
+import android.widget.ImageView
+import android.widget.Switch
+
 
 class reminder_log : Fragment() {
 
@@ -47,11 +50,17 @@ class reminder_log : Fragment() {
     }
 
     private fun fetchAndDisplayReminders() {
-        Log.d("FetchAndDisp","I a m working")
+        Log.d("FetchAndDisp", "I am working")
+
         val currentUser = FirebaseAuth.getInstance().currentUser
-        currentUser?.let { user ->
-            val userId = user.uid
-            val reminderRef = db.collection("reminder").document(userId).collection("uname")
+        val userId = currentUser?.uid
+        val userName = currentUser?.displayName
+
+        if (userId != null && userName != null) {
+            val reminderRef = db.collection("reminder")
+                .document(userId)
+                .collection(userName)
+
             reminderRef.get()
                 .addOnSuccessListener { result ->
                     reminderList.clear()
@@ -64,14 +73,16 @@ class reminder_log : Fragment() {
                     }
                     Log.d("reminder_log", "Reminder List Size: ${reminderList.size}")
 
-                    val adapter = ReminderAdapter(reminderList)
-                    recyclerView.adapter = adapter
+                    adapter.notifyDataSetChanged() // Notify adapter about data change
                 }
                 .addOnFailureListener { exception ->
                     Log.e("reminder_log", "Error fetching reminders", exception)
                 }
+        } else {
+            Log.e("reminder_log", "User ID or User Name is null")
         }
     }
+
 
     inner class ReminderAdapter(private val reminderList: List<Reminder>) :
         RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
@@ -90,14 +101,17 @@ class reminder_log : Fragment() {
         override fun getItemCount(): Int = reminderList.size
 
         inner class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
-            private val descriptionTextView: TextView = itemView.findViewById(R.id.descriptionTextView)
-            private val labelTextView: TextView = itemView.findViewById(R.id.labelTextView)
+            private val alarmIconImageView: ImageView = itemView.findViewById(R.id.alarmIcon)
+            private val alarmTitleTextView: TextView = itemView.findViewById(R.id.alarmTitle)
+            private val alarmDescriptionTextView: TextView = itemView.findViewById(R.id.alarmDescription)
+            private val alarmSwitch: Switch = itemView.findViewById(R.id.alarmSwitch)
+            private val Date : TextView = itemView.findViewById(R.id.date)
 
             fun bind(reminder: Reminder) {
-                dateTextView.text = reminder.date
-                descriptionTextView.text = reminder.description
-                labelTextView.text = reminder.label
+                alarmIconImageView.setImageResource(R.drawable.ic_alarm)
+                alarmTitleTextView.text = reminder.label
+                alarmDescriptionTextView.text = reminder.description
+                Date.text = "Your due is on ${reminder.date}"
             }
         }
     }
