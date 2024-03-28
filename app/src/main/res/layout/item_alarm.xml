@@ -26,8 +26,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:layout_height="wrap_content">
 
                 <!-- Alarm Icon -->
                 <ImageView
@@ -45,7 +44,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/alarmIcon"
-                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <TextView
