@@ -18,6 +18,12 @@ import com.google.android.material.textfield.TextInputEditText
 import android.util.Log
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 
@@ -105,9 +111,12 @@ class expense_log : AppCompatActivity() {
         val currentUserUid = firebaseAuth.currentUser?.uid ?: return
         val currentUser = firebaseAuth.currentUser
         val userName = currentUser?.displayName ?: ""
+        val currentYear = getCurrentYear()
+        val currentMonth = getCurrentMonthName()
 
         // Reference to the user's document in the database
-        val userExpenseRef = db.collection("Expense").document(currentUserUid).collection(userName).document()
+        val userExpenseRef = db.collection("expense").document(currentUserUid)
+            .collection(userName).document(currentYear).collection(currentMonth).document()
 
         userExpenseRef.set(expenseData)
             .addOnSuccessListener {
@@ -118,6 +127,15 @@ class expense_log : AppCompatActivity() {
                 Log.e("Firestore", "Error adding expense data", e)
                 // Handle failure, if needed
             }
+    }
+    private fun getCurrentYear(): String {
+        return Calendar.getInstance().get(Calendar.YEAR).toString()
+    }
+
+    private fun getCurrentMonthName(): String {
+        val calendar = Calendar.getInstance()
+        val monthIndex = calendar.get(Calendar.MONTH)
+        return SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.time)
     }
 
     private fun setupDatePicker() {

@@ -71,6 +71,7 @@ class Login : AppCompatActivity() {
                         Toast.makeText(this, "Welcome, ${user.displayName}!", Toast.LENGTH_SHORT).show()
                         // Check and create year and month collections
                         checkAndCreateYearAndMonthCollections(user.uid)
+                        createAdditionalCollection(user.uid, user.displayName ?: "")
                         // Navigate to the expense screen
                         navigateToExpenseScreen()
                     }
@@ -164,5 +165,32 @@ class Login : AppCompatActivity() {
         val intent = Intent(this, Navigation::class.java)
         startActivity(intent)
     }
+
+    private fun createAdditionalCollection(userId: String, username: String) {
+        val currentYear = getCurrentYear()
+        val months = SimpleDateFormat("MMMM", Locale.getDefault()).let { sdf ->
+            (0 until 12).map { index ->
+                Calendar.getInstance().apply {
+                    set(Calendar.MONTH, index)
+                }.time.let { sdf.format(it) }
+            }
+        }
+
+        months.forEach { month ->
+            val expenseCollectionRef = db.collection("expense").document(userId).collection(username).document(currentYear).collection(month)
+
+            // Create the collection for the current month
+            expenseCollectionRef.document().set(hashMapOf<String, Any>())
+                .addOnSuccessListener {
+                    // Collection created successfully
+                    Toast.makeText(this, "Expense collection for $month created successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { exception ->
+                    // Error creating collection
+                    Toast.makeText(this, "Error creating expense collection for $month: ${exception.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
 
 }
