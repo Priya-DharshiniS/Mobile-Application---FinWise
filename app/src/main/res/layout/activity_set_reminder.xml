@@ -4,136 +4,137 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/layout_gradient"
     tools:context=".SetReminder">
 
-    <TextView
-        android:id="@+id/setReminderTextView"
+    <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
         android:background="@color/royalpurple"
-        android:padding="12dp"
-        android:text="Set Reminder"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="27sp"
-        android:textStyle="bold" />
+        android:padding="20dp"
+        android:gravity="center_vertical|center_horizontal">
 
-    <!-- Date -->
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textTotalSpending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Reminder"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:paddingRight="8dp"
+            android:background="@color/royalpurple" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/setReminderTextView"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:text="Date"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:layout_margin="60dp"
+        android:layout_below="@id/layout"
+        android:padding="24dp"
+        android:elevation="4dp"
+        app:cardCornerRadius="16dp">
 
-    <EditText
-        android:id="@+id/dateEditText"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/setReminderTextView"
-        android:layout_toRightOf="@id/dateTextView"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="60dp"
-        android:textColor="@color/black"
-        android:inputType="date"
-        android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-    <!-- Time -->
-    <TextView
-        android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dateEditText"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:text="Time"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+            <!-- Date -->
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/timeEditText"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dateEditText"
-        android:layout_toRightOf="@id/timeTextView"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="60dp"
-        android:textColor="@color/black"
-        android:inputType="time"
-        android:focusable="false"
-        android:focusableInTouchMode="false"/>
+            <EditText
+                android:id="@+id/dateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:inputType="date"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
 
-    <!-- Label -->
-    <TextView
-        android:id="@+id/labelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/timeEditText"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:text="Label"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+            <!-- Time -->
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
 
-    <EditText
-        android:id="@+id/labelEditText"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/timeEditText"
-        android:layout_toRightOf="@id/labelTextView"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="90dp"
-        android:textColor="@color/black"
-        android:background="@drawable/custom_editor"
-        android:padding="8dp"/>
+            <EditText
+                android:id="@+id/timeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:inputType="time"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
 
-    <!-- Description -->
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/labelEditText"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:text="Description"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+            <!-- Label -->
+            <TextView
+                android:id="@+id/labelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Label"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
 
-    <EditText
-        android:id="@+id/descriptionEditText"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/labelEditText"
-        android:layout_toRightOf="@id/descriptionTextView"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="40dp"
-        android:textColor="@color/black"
-        android:background="@drawable/custom_editor"
-        android:padding="8dp"/>
+            <EditText
+                android:id="@+id/labelEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/custom_editor"
+                android:padding="8dp" />
 
-    <!-- Set Button -->
-    <Button
-        android:id="@+id/setButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/descriptionEditText"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="150dp"
-        android:backgroundTint="@color/royalpurple"
-        android:text="Set"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="20dp"/>
+            <!-- Description -->
+            <TextView
+                android:id="@+id/descriptionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
 
+            <EditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/custom_editor"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/setButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/royalpurple"
+                android:text="Set"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

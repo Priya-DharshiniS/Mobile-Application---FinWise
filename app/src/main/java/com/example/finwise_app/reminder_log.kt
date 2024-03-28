@@ -103,14 +103,12 @@ class reminder_log : Fragment() {
         inner class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             private val alarmIconImageView: ImageView = itemView.findViewById(R.id.alarmIcon)
             private val alarmTitleTextView: TextView = itemView.findViewById(R.id.alarmTitle)
-            private val alarmDescriptionTextView: TextView = itemView.findViewById(R.id.alarmDescription)
             private val alarmSwitch: Switch = itemView.findViewById(R.id.alarmSwitch)
             private val Date : TextView = itemView.findViewById(R.id.date)
 
             fun bind(reminder: Reminder) {
                 alarmIconImageView.setImageResource(R.drawable.ic_alarm)
                 alarmTitleTextView.text = reminder.label
-                alarmDescriptionTextView.text = reminder.description
                 Date.text = "Your due is on ${reminder.date}"
             }
         }
