@@ -155,4 +155,6 @@
                 android:backgroundTint="@color/royalpurple" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+
 </RelativeLayout>

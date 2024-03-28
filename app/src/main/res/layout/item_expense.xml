@@ -64,46 +64,57 @@
         </RelativeLayout>
 
 
-        <LinearLayout
-            android:id="@+id/rowContainer"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/dateContainer"
-            android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
 
-                <!-- Icon -->
-                <ImageView
-                    android:id="@+id/iconImageView"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/rowContainer"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_background"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="16dp"
-                    android:adjustViewBounds="true"
-                    android:maxWidth="48dp"
-                    android:maxHeight="48dp" />
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:onClick="onDeleteClicked">
 
-                <!-- Category Name -->
-                <TextView
-                    android:id="@+id/categoryTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                   android:layout_marginTop="13dp"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                        <!-- Icon -->
+                        <ImageView
+                            android:id="@+id/iconImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_launcher_background"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="16dp"
+                            android:adjustViewBounds="true"
+                            android:maxWidth="48dp"
+                            android:maxHeight="48dp" />
 
-                <!-- Amount -->
-                <TextView
-                    android:id="@+id/amountTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#FF0000"
-                    android:layout_marginTop="13dp"
-                    android:textSize="16sp"
-                    android:gravity="end" />
-        </LinearLayout>
+                        <!-- Category Name -->
+                        <TextView
+                            android:id="@+id/categoryTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="13dp"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            android:gravity="center_vertical" />
+
+                        <!-- Amount -->
+                        <TextView
+                            android:id="@+id/amountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FF0000"
+                            android:layout_marginTop="13dp"
+                            android:textSize="16sp"
+                            android:gravity="end" />
+                </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <View
             android:id="@+id/separatorView"
@@ -111,7 +122,6 @@
             android:layout_height="1dp"
             android:background="#800080"
             android:visibility="gone"
-            android:layout_below="@id/rowContainer" />
-
+            android:layout_below="@id/cardView" />
 
 </RelativeLayout>

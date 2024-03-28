@@ -17,9 +17,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
+import android.app.Activity
+
 
 
 class ExpenseActivity : Fragment() {
+
+    private val REQUEST_EXPENSE_LOG = 100
 
     private val db = FirebaseFirestore.getInstance()
     private val expensesCollection = db.collection("expense_log")
@@ -43,14 +47,21 @@ class ExpenseActivity : Fragment() {
         val btnAddExpense = view.findViewById<ImageButton>(R.id.btnAddExpense)
 
         btnAddExpense.setOnClickListener {
-            // Navigate to the expense log screen
-            val intent = Intent(requireActivity(), expense_log::class.java)
-            startActivity(intent)
+            val intent = Intent(requireContext(), expense_log::class.java)
+            startActivityForResult(intent, REQUEST_EXPENSE_LOG)
         }
+
 
         retrieveAndDisplayExpenseData()
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_EXPENSE_LOG && resultCode == Activity.RESULT_OK) {
+            // Handle result if needed
+        }
     }
 
     override fun onResume() {
@@ -198,7 +209,7 @@ class ExpenseActivity : Fragment() {
             "Medical" -> R.drawable.medical
             "Pet" -> R.drawable.pet_icon
             "Entertainment" -> R.drawable.entertainment
-            "Appliances" -> R.drawable.home_appliance
+            "Appliance" -> R.drawable.home_appliance
             "Investment" -> R.drawable.invest_icon
             "Loan" -> R.drawable.loan_icon
             else -> R.drawable.coin // Default icon
