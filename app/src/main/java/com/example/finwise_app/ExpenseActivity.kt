@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment
 class ExpenseActivity : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
-    private val expensesCollection = db.collection("expense")
+    private val expensesCollection = db.collection("expense_log")
     private lateinit var recyclerView: RecyclerView
     private lateinit var expenseAdapter: ExpenseAdapter
     private lateinit var firebaseAuth: FirebaseAuth
@@ -62,13 +62,8 @@ class ExpenseActivity : Fragment() {
         val currentUserUid = firebaseAuth.currentUser?.uid ?: return
         val currentUser = firebaseAuth.currentUser
         val userName = currentUser?.displayName ?: ""
-        val currentYear = getCurrentYear()
-        val currentMonth = getCurrentMonthName()
-        val userExpenseRef = expensesCollection
-            .document(currentUserUid)
+        val userExpenseRef = db.collection("Expense").document(currentUserUid)
             .collection(userName)
-            .document(currentYear)
-            .collection(currentMonth)
 
         userExpenseRef.get()
             .addOnSuccessListener { documents ->
@@ -155,16 +150,6 @@ class ExpenseActivity : Fragment() {
                 // Handle errors
                 Log.e("ExpenseActivity", "Error getting expense documents", exception)
             }
-    }
-
-    private fun getCurrentYear(): String {
-        return Calendar.getInstance().get(Calendar.YEAR).toString()
-    }
-
-    private fun getCurrentMonthName(): String {
-        val calendar = Calendar.getInstance()
-        val monthIndex = calendar.get(Calendar.MONTH)
-        return SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.time)
     }
     private fun updateTotalSpending(totalSpending: Double) {
         val currentUser = firebaseAuth.currentUser
