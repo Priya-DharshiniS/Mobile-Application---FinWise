@@ -61,6 +61,7 @@
                 android:background="@drawable/custom_editor"
                 android:layout_marginTop="12dp"
                 android:textColor="@color/black"
+                android:padding="6dp"
                 android:textColorHint="@color/purple" />
 
         </LinearLayout>
@@ -95,6 +96,7 @@
                 android:background="@drawable/custom_editor"
                 android:layout_marginTop="12dp"
                 android:textColor="@color/black"
+                android:padding="6dp"
                 android:textColorHint="@color/purple" />
 
         </LinearLayout>
@@ -129,6 +131,7 @@
                 android:background="@drawable/custom_editor"
                 android:layout_marginTop="12dp"
                 android:textColor="@color/white"
+                android:padding="6dp"
                 android:textColorHint="@color/purple" />
 
         </LinearLayout>
@@ -143,6 +146,7 @@
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/royalpurple"
         android:text="Save"
+        android:textStyle="bold"
         android:textColor="@color/white" />
 
 </LinearLayout>
