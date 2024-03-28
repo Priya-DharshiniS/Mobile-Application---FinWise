@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -138,9 +139,12 @@ class expense_log : AppCompatActivity() {
 
             selectedImageView.setImageResource(selectedCategoryImage)
             selectedCategory = selectedCategoryName
+
+            // Find the TextView for displaying the selected category name
+            val selectedCategoryTextView: TextView = findViewById(R.id.selectedCategoryName)
+            selectedCategoryTextView.text = selectedCategoryName
         }
     }
-
     companion object {
         const val REQUEST_CODE = 100
     }
