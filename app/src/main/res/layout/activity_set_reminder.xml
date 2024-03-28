@@ -31,7 +31,7 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="60dp"
+        android:layout_margin="25dp"
         android:layout_below="@id/layout"
         android:padding="24dp"
         android:elevation="4dp"
