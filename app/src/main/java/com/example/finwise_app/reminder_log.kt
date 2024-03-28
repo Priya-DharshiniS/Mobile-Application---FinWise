@@ -109,7 +109,7 @@ class reminder_log : Fragment() {
             fun bind(reminder: Reminder) {
                 alarmIconImageView.setImageResource(R.drawable.ic_alarm)
                 alarmTitleTextView.text = reminder.label
-                Date.text = "Your due is on ${reminder.date}"
+                Date.text = "Due is on ${reminder.date}"
             }
         }
     }
