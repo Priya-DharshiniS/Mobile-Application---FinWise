@@ -71,6 +71,7 @@
             android:layout_below="@id/dateContainer"
             android:layout_marginTop="8dp"
             app:cardCornerRadius="8dp"
+            android:background="@color/white"
             app:cardElevation="4dp">
 
                 <LinearLayout
@@ -79,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:clickable="true"
+                    android:background="@color/white"
                     android:onClick="onDeleteClicked">
 
                         <!-- Icon -->

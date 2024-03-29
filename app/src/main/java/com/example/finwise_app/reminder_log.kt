@@ -15,6 +15,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.ImageView
 import android.widget.Switch
+import android.app.PendingIntent
+import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Locale
+import android.content.Context
 
 
 class reminder_log : Fragment() {
@@ -24,6 +29,15 @@ class reminder_log : Fragment() {
     private lateinit var adapter: ReminderAdapter
     private val reminderList = mutableListOf<Reminder>()
     private val db = FirebaseFirestore.getInstance()
+    private lateinit var reminderAlarmManager: ReminderAlarmManager
+    private lateinit var fragmentContext: Context
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Assign the context to the fragmentContext variable
+        fragmentContext = context
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +51,7 @@ class reminder_log : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = ReminderAdapter(reminderList)
         recyclerView.adapter = adapter
+        reminderAlarmManager = ReminderAlarmManager(fragmentContext)
         setupPlusButton()
         fetchAndDisplayReminders()
         return view
@@ -65,11 +80,14 @@ class reminder_log : Fragment() {
                 .addOnSuccessListener { result ->
                     reminderList.clear()
                     for (document in result) {
+                        val id = document.id
+                        val time = document.getString("Time") ?: ""
                         val date = document.getString("Date") ?: ""
                         val description = document.getString("Description") ?: ""
                         val label = document.getString("Label") ?: ""
                         Log.d("reminder_log", "Date: $date, Description: $description, Label: $label")
-                        reminderList.add(Reminder(date, description, label))
+                        reminderList.add(Reminder(id,time,date, description, label))
+
                     }
                     Log.d("reminder_log", "Reminder List Size: ${reminderList.size}")
 
@@ -105,14 +123,62 @@ class reminder_log : Fragment() {
             private val alarmTitleTextView: TextView = itemView.findViewById(R.id.alarmTitle)
             private val alarmSwitch: Switch = itemView.findViewById(R.id.alarmSwitch)
             private val Date : TextView = itemView.findViewById(R.id.date)
+            private lateinit var alarmPendingIntent: PendingIntent
+
 
             fun bind(reminder: Reminder) {
                 alarmIconImageView.setImageResource(R.drawable.ic_alarm)
                 alarmTitleTextView.text = reminder.label
                 Date.text = "Due is on ${reminder.date}"
+
+                alarmSwitch.isChecked = isAlarmSetForReminder(reminder)
+
+                // Set OnClickListener for the switch to toggle alarm state
+                alarmSwitch.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        setAlarmForReminder(reminder)
+                    } else {
+                        cancelAlarmForReminder(reminder)
+                    }
+                }
+            }
+            private fun setAlarmForReminder(reminder: Reminder) {
+                val sdf = SimpleDateFormat("MMMM dd, yyyy h:mm a", Locale.getDefault())
+                val reminderDate = sdf.parse("${reminder.date} ${reminder.time}")
+                if (reminderDate != null) {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = reminderDate
+
+                    // Convert reminder time to milliseconds
+                    val reminderTimeMillis = calendar.timeInMillis
+
+                    // Call the setAlarmForReminder function from the ReminderAlarmManager instance
+                    reminderAlarmManager.setAlarmForReminder(reminder.id, reminderTimeMillis)
+
+                    // Set the next alarm for the same date next month
+                    calendar.add(Calendar.MONTH, 1) // Move to next month
+                    val nextMonthReminderTimeMillis = calendar.timeInMillis
+                    reminderAlarmManager.setAlarmForNextMonth(reminder.id, nextMonthReminderTimeMillis)
+                    alarmSwitch.isChecked = true
+                } else {
+                    Log.e("ReminderViewHolder", "Failed to parse reminder date and time")
+                }
+            }
+
+
+            // Example of calling isAlarmSetForReminder function
+            private fun isAlarmSetForReminder(reminder: Reminder): Boolean {
+                // Call the isAlarmSetForReminder function from the ReminderAlarmManager instance
+                return reminderAlarmManager.isAlarmSetForReminder(reminder.id)
+            }
+
+            // Example of calling cancelAlarmForReminder function
+            private fun cancelAlarmForReminder(reminder: Reminder) {
+                // Call the cancelAlarmForReminder function from the ReminderAlarmManager instance
+                reminderAlarmManager.cancelAlarmForReminder(reminder.id)
             }
         }
     }
 
-    data class Reminder(val date: String, val description: String, val label: String)
+    data class Reminder(val id: String,val time: String,val date: String, val description: String, val label: String)
 }
