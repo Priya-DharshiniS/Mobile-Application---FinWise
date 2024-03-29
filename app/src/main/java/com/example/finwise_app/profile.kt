@@ -13,15 +13,21 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
-import java.util.*
-import android.widget.Toast
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import androidx.core.app.NotificationManagerCompat
 
+import androidx.core.app.NotificationCompat
+import java.util.*
 
 
 class profile : Fragment() {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var currentUser: FirebaseUser
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +53,12 @@ class profile : Fragment() {
             // Ensure views are not null before accessing them
             val income = addIncomeEditText.text.toString().toDoubleOrNull() ?: 0.0
             val budget = addBudgetEditText.text.toString().toDoubleOrNull() ?: 0.0
-            val savings = income - budget
+
+            val savings = if (budget < income) {
+                0.0 // Set savings to zero if budget exceeds income
+            } else {
+                income - budget // Calculate savings normally if budget does not exceed income
+            }
             totalSavingsEditText.setText(savings.toString())
             // Call function to update Firestore
             updateFinanceData(income, budget, savings)
@@ -137,6 +148,8 @@ class profile : Fragment() {
                             // Check if spending exceeds budget
                             if (spending > budget) {
                                 // Send notification
+
+
                                 sendNotification("You have exceeded your budget!")
                             }
                         }
@@ -156,16 +169,24 @@ class profile : Fragment() {
     }
 
     private fun sendNotification(message: String) {
-        // Implement logic to send notification here
-        // For example, you can use Firebase Cloud Messaging to send push notifications
-        // You would need to implement the necessary code to send notifications to the user
-        // This might involve using Firebase Cloud Messaging or another notification service
-        // You can refer to Firebase documentation for implementing push notifications
-    }
+        val notificationId = 1
+        val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+            .setSmallIcon(R.drawable.sharp_add_alert_24) // Set your notification icon
+            .setContentTitle("Budget Limit Exceeded ;_; ")
+            .setContentText("Dear User, Please me mindful about what you spend")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
 
+        // Show the notification
+        with(NotificationManagerCompat.from(requireContext())) {
+            // notificationId is a unique int for each notification that you must define
+            notify(notificationId, builder.build())
+        }
+    }
     companion object {
         private const val TAG = "ProfileFragment"
-    }
+        private const val CHANNEL_ID = "100"
 
+    }
 
 }

@@ -45,6 +45,7 @@ class expense_log : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             if (validateFields()) {
                 saveExpenseData()
+                finish()
             } else {
                 // Handle case where fields are not valid (e.g., display an error message)
             }

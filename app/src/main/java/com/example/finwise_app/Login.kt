@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import android.content.Context
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -13,6 +15,10 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import java.text.SimpleDateFormat
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.util.Log
+
 
 class Login : AppCompatActivity() {
 
@@ -21,10 +27,14 @@ class Login : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
+    private val CHANNEL_ID = "100" //for budget alert
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        createNotificationChannel()
 
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -40,6 +50,20 @@ class Login : AppCompatActivity() {
             if (validateInput(username, password)) {
                 loginUser(username, password)
             }
+        }
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
@@ -72,6 +96,7 @@ class Login : AppCompatActivity() {
                         // Check and create year and month collections
                         checkAndCreateYearAndMonthCollections(user.uid)
                         // Navigate to the expense screen
+
                         navigateToExpenseScreen()
                     }
                 } else {
@@ -164,5 +189,8 @@ class Login : AppCompatActivity() {
         val intent = Intent(this, Navigation::class.java)
         startActivity(intent)
     }
+
+
+
 
 }

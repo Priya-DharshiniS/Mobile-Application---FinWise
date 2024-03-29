@@ -18,12 +18,14 @@ import java.util.*
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import android.app.Activity
-
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 
 
 class ExpenseActivity : Fragment() {
 
     private val REQUEST_EXPENSE_LOG = 100
+    private val CHANNEL_ID = "100"
 
     private val db = FirebaseFirestore.getInstance()
     private val expensesCollection = db.collection("expense_log")
@@ -182,6 +184,13 @@ class ExpenseActivity : Fragment() {
                             Log.d("ExpenseActivity", "Total spending updated successfully")
                             // Fetch and display total spending
                             fetchAndDisplayTotalSpending()
+                            val budget = documentSnapshot.getDouble("budget") ?: 0.0
+
+                            // Check if budget goes below 0
+                            if (budget - totalSpending < 0) {
+                                // Budget goes below 0, send notification
+                                sendNotification("budget Exceeded")
+                            }
                         }
                         .addOnFailureListener { exception ->
                             Log.e("ExpenseActivity", "Error updating total spending", exception)
@@ -367,7 +376,21 @@ class ExpenseActivity : Fragment() {
         }
     }
 
+    private fun sendNotification(message: String) {
+        val notificationId = 1
+        val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+            .setSmallIcon(R.drawable.sharp_add_alert_24) // Set your notification icon
+            .setContentTitle("Budget Limit Exceeded ;_; ")
+            .setContentText("Dear User, Please me mindful about what you spend")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
 
+        // Show the notification
+        with(NotificationManagerCompat.from(requireContext())) {
+            // notificationId is a unique int for each notification that you must define
+            notify(notificationId, builder.build())
+        }
+    }
 
 }
 
