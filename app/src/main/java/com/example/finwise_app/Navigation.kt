@@ -34,16 +34,16 @@ class Navigation : AppCompatActivity() {
                     true
                 }
 
-//                R.id.nav_graph -> {
-//                    loadFragment(PieChartFragment(), supportFragmentManager)
-//                    true
-//                }
-//
+                R.id.nav_graph -> {
+                    loadFragment(Pie(), supportFragmentManager)
+                    true
+                }
+
                R.id.nav_remainder -> {
                    loadFragment(reminder_log(), supportFragmentManager)
                     true
                 }
-//
+
                 R.id.nav_profile -> {
                     loadFragment(profile(), supportFragmentManager)
                     true

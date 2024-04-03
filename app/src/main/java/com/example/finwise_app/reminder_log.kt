@@ -53,7 +53,7 @@ class reminder_log : Fragment() {
         recyclerView.adapter = adapter
         reminderAlarmManager = ReminderAlarmManager(fragmentContext)
         setupPlusButton()
-        fetchAndDisplayReminders()
+        //fetchAndDisplayReminders()
         return view
     }
 
@@ -64,42 +64,42 @@ class reminder_log : Fragment() {
         }
     }
 
-    private fun fetchAndDisplayReminders() {
-        Log.d("FetchAndDisp", "I am working")
-
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userId = currentUser?.uid
-        val userName = currentUser?.displayName
-
-        if (userId != null && userName != null) {
-            val reminderRef = db.collection("reminder")
-                .document(userId)
-                .collection(userName)
-
-            reminderRef.get()
-                .addOnSuccessListener { result ->
-                    reminderList.clear()
-                    for (document in result) {
-                        val id = document.id
-                        val time = document.getString("Time") ?: ""
-                        val date = document.getString("Date") ?: ""
-                        val description = document.getString("Description") ?: ""
-                        val label = document.getString("Label") ?: ""
-                        Log.d("reminder_log", "Date: $date, Description: $description, Label: $label")
-                        reminderList.add(Reminder(id,time,date, description, label))
-
-                    }
-                    Log.d("reminder_log", "Reminder List Size: ${reminderList.size}")
-
-                    adapter.notifyDataSetChanged() // Notify adapter about data change
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("reminder_log", "Error fetching reminders", exception)
-                }
-        } else {
-            Log.e("reminder_log", "User ID or User Name is null")
-        }
-    }
+//    private fun fetchAndDisplayReminders() {
+//        Log.d("FetchAndDisp", "I am working")
+//
+//        val currentUser = FirebaseAuth.getInstance().currentUser
+//        val userId = currentUser?.uid
+//        val userName = currentUser?.displayName
+//
+//        if (userId != null && userName != null) {
+//            val reminderRef = db.collection("reminder")
+//                .document(userId)
+//                .collection(userName)
+//
+//            reminderRef.get()
+//                .addOnSuccessListener { result ->
+//                    reminderList.clear()
+//                    for (document in result) {
+//                        val id = document.id
+//                        val time = document.getString("Time") ?: ""
+//                        val date = document.getString("Date") ?: ""
+//                        val description = document.getString("Description") ?: ""
+//                        val label = document.getString("Label") ?: ""
+//                        Log.d("reminder_log", "Date: $date, Description: $description, Label: $label")
+//                        reminderList.add(Reminder(id,time,date, description, label))
+//
+//                    }
+//                    Log.d("reminder_log", "Reminder List Size: ${reminderList.size}")
+//
+//                    adapter.notifyDataSetChanged() // Notify adapter about data change
+//                }
+//                .addOnFailureListener { exception ->
+//                    Log.e("reminder_log", "Error fetching reminders", exception)
+//                }
+//        } else {
+//            Log.e("reminder_log", "User ID or User Name is null")
+//        }
+//    }
 
 
     inner class ReminderAdapter(private val reminderList: List<Reminder>) :

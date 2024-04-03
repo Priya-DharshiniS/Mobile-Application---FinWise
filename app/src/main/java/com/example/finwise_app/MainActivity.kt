@@ -34,78 +34,98 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         FirebaseApp.initializeApp(this)
 
         mAuth = FirebaseAuth.getInstance()
-        emailEditText = findViewById(R.id.email)
-        passwordEditText = findViewById(R.id.Password)
-        userNameEditText = findViewById(R.id.usern)
-        signUpButton = findViewById(R.id.Sign)
-        nameErrorTextView = findViewById(R.id.nameError)
-        emailErrorTextView = findViewById(R.id.emailError)
-        passwordErrorTextView = findViewById(R.id.passwordError)
-        alreadyHaveAccountTextView = findViewById(R.id.Alreadyuser)
-        db = FirebaseFirestore.getInstance()
+
+            emailEditText = findViewById(R.id.email)
+            passwordEditText = findViewById(R.id.Password)
+            userNameEditText = findViewById(R.id.usern)
+            signUpButton = findViewById(R.id.Sign)
+            nameErrorTextView = findViewById(R.id.nameError)
+            emailErrorTextView = findViewById(R.id.emailError)
+            passwordErrorTextView = findViewById(R.id.passwordError)
+            alreadyHaveAccountTextView = findViewById(R.id.Alreadyuser)
+            db = FirebaseFirestore.getInstance()
 
 
-        signUpButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-            val userName = userNameEditText.text.toString()
+            signUpButton.setOnClickListener {
+                val email = emailEditText.text.toString()
+                val password = passwordEditText.text.toString()
+                val userName = userNameEditText.text.toString()
 
-            if (validateInput(email, password, userName)) {
-                Log.d("MyActivity", "sign up clicked")
+                if (validateInput(email, password, userName)) {
+                    Log.d("MyActivity", "sign up clicked")
 
-                // Create a new user with email, password, and name
-                mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            // Sign up success, update UI with the signed-in user's information
-                            val user = mAuth.currentUser
-                            user?.updateProfile(UserProfileChangeRequest.Builder()
-                                .setDisplayName(userName)
-                                .build())
-                                ?.addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        // Optionally, you can navigate to another activity or do other actions here
-                                        Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                    // Create a new user with email, password, and name
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                // Sign up success, update UI with the signed-in user's information
+                                val user = mAuth.currentUser
+                                user?.updateProfile(
+                                    UserProfileChangeRequest.Builder()
+                                        .setDisplayName(userName)
+                                        .build()
+                                )
+                                    ?.addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            // Optionally, you can navigate to another activity or do other actions here
+                                            Toast.makeText(
+                                                this,
+                                                "Sign up successful!",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
 
-                                        // Retrieve and display the user's display name
-                                        val displayName = user?.displayName
-                                        if (displayName != null) {
-                                            // Display name is available, you can use it in your app
-                                            Toast.makeText(this, "Welcome, $displayName!", Toast.LENGTH_SHORT).show()
-                                        } else {
-                                            // Display name is not set
-                                            Toast.makeText(this, "Display name is not set", Toast.LENGTH_SHORT).show()
+                                            // Retrieve and display the user's display name
+                                            val displayName = user?.displayName
+                                            if (displayName != null) {
+                                                // Display name is available, you can use it in your app
+                                                Toast.makeText(
+                                                    this,
+                                                    "Welcome, $displayName!",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            } else {
+                                                // Display name is not set
+                                                Toast.makeText(
+                                                    this,
+                                                    "Display name is not set",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+
+
+                                            // Navigate to the expense screen
+                                            val intent = Intent(this, Login::class.java)
+                                            startActivity(intent)
+
                                         }
-
-
-
-                                        // Navigate to the expense screen
-                                        val intent = Intent(this, Login::class.java)
-                                        startActivity(intent)
-
                                     }
-                                }
-                        } else {
-                            val exception = task.exception
-                            // Handle the exception (log, display error message, etc.)
-                            Log.e("SignupError", "Error creating user", exception)
-                            // If sign up fails, display a message to the user.
-                            Toast.makeText(this, "Sign up failed. Please try again.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                val exception = task.exception
+                                // Handle the exception (log, display error message, etc.)
+                                Log.e("SignupError", "Error creating user", exception)
+                                // If sign up fails, display a message to the user.
+                                Toast.makeText(
+                                    this,
+                                    "Sign up failed. Please try again.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+
                         }
-
-
-                    }
+                }
+            }
+            alreadyHaveAccountTextView.setOnClickListener {
+                // Open the login activity when the "Already Have an Account?" TextView is clicked
+                val intent = Intent(this, Login::class.java)
+                startActivity(intent)
             }
         }
-        alreadyHaveAccountTextView.setOnClickListener {
-            // Open the login activity when the "Already Have an Account?" TextView is clicked
-            val intent = Intent(this, Login::class.java)
-            startActivity(intent)
-        }
-    }
+
 
     private fun validateInput(email: String, password: String, userName: String): Boolean {
         val passwordPattern = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{6,}$".toRegex()
@@ -135,7 +155,5 @@ class MainActivity : AppCompatActivity() {
 
         return isValid
     }
-
-
 
 }

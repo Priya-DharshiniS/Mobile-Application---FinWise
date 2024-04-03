@@ -5,14 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.auth.FirebaseAuthSettings
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+
 import java.util.*
 import java.text.SimpleDateFormat
 import android.app.NotificationChannel
@@ -27,6 +32,7 @@ class Login : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
+    private lateinit var signUpTextView: TextView
     private val CHANNEL_ID = "100" //for budget alert
 
 
@@ -41,6 +47,18 @@ class Login : AppCompatActivity() {
         usernameEditText = findViewById(R.id.username)
         passwordEditText = findViewById(R.id.password)
         loginButton = findViewById(R.id.loginButton)
+        signUpTextView = findViewById(R.id.SignSwitch)
+
+        signUpTextView.setOnClickListener {
+            // Open the sign-up activity when the "Not a user? Click here to Sign up." TextView is clicked
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        if (SessionManager.isLoggedIn(this)) {
+            // User is already logged in, navigate to the Navigation activity
+            navigateToExpenseScreen()
+        }
 
 
         loginButton.setOnClickListener {
@@ -93,6 +111,7 @@ class Login : AppCompatActivity() {
                     if (user != null) {
                         // Display a toast message with the user's name
                         Toast.makeText(this, "Welcome, ${user.displayName}!", Toast.LENGTH_SHORT).show()
+                        SessionManager.setIsLoggedIn(this, true)
                         // Check and create year and month collections
                         checkAndCreateYearAndMonthCollections(user.uid)
                         // Navigate to the expense screen
@@ -185,7 +204,7 @@ class Login : AppCompatActivity() {
         return Calendar.getInstance().get(Calendar.YEAR).toString()
     }
 
-        private fun navigateToExpenseScreen() {
+    private fun navigateToExpenseScreen() {
         val intent = Intent(this, Navigation::class.java)
         startActivity(intent)
     }

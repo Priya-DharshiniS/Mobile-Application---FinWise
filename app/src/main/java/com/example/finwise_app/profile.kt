@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import androidx.core.app.NotificationManagerCompat
-
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import java.util.*
 
@@ -40,6 +40,7 @@ class profile : Fragment() {
         val addBudgetEditText = view.findViewById<EditText>(R.id.AddBudget)
         val totalSavingsEditText = view.findViewById<EditText>(R.id.TotalSavings)
         val saveButton = view.findViewById<Button>(R.id.Savebtn)
+        val logoutButton = view.findViewById<Button>(R.id.LogoutBtn)
 
 
         hiTextView.text = "Hi ${currentUser.displayName} !!!"
@@ -59,6 +60,18 @@ class profile : Fragment() {
             // Call function to update Firestore
             updateFinanceData(income, budget, savings)
         }
+
+        logoutButton.setOnClickListener {
+            SessionManager.clearSession(requireContext())
+
+            // Navigate the user to the login screen
+            val intent = Intent(requireContext(), Login::class.java)
+            startActivity(intent)
+
+            // Finish the current activity to prevent the user from navigating back to it using the back button
+            requireActivity().finish()
+        }
+
 
         return view
     }

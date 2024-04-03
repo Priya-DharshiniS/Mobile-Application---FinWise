@@ -45,7 +45,7 @@ class SetReminder : AppCompatActivity() {
 
         // Set OnClickListener for saveButton
         saveButton.setOnClickListener {
-            saveReminderToFirestore()
+           // saveReminderToFirestore()
         }
     }
 
@@ -88,43 +88,43 @@ class SetReminder : AppCompatActivity() {
         timePicker.show()
     }
 
-    private fun saveReminderToFirestore() {
-        // You can perform validation here if necessary
-
-        // Continue with saving the reminder to Firestore
-        val time = timeEditText.text.toString().trim()
-        val label = labelEditText.text.toString().trim()
-        val description = descriptionEditText.text.toString().trim()
-
-        // Get the current user's UID and name
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userId = currentUser?.uid
-        val userName = currentUser?.displayName
-
-        if (userId != null && userName != null) {
-            val reminder = hashMapOf(
-                "Date" to dateEditText.text.toString().trim(),
-                "Time" to time,
-                "Label" to label,
-                "Description" to description
-            )
-
-            db.collection("reminder")
-                .document(userId)
-                .collection(userName)
-                .add(reminder)
-                .addOnSuccessListener { documentReference ->
-                    // Handle success
-                    Toast.makeText(this, "Reminder saved successfully!", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    // Handle failures
-                    Toast.makeText(this, "Failed to save reminder!", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            // User is not authenticated or user's UID is null
-            Toast.makeText(this, "User not authenticated!", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun saveReminderToFirestore() {
+//        // You can perform validation here if necessary
+//
+//        // Continue with saving the reminder to Firestore
+//        val time = timeEditText.text.toString().trim()
+//        val label = labelEditText.text.toString().trim()
+//        val description = descriptionEditText.text.toString().trim()
+//
+//        // Get the current user's UID and name
+//        val currentUser = FirebaseAuth.getInstance().currentUser
+//        val userId = currentUser?.uid
+//        val userName = currentUser?.displayName
+//
+//        if (userId != null && userName != null) {
+//            val reminder = hashMapOf(
+//                "Date" to dateEditText.text.toString().trim(),
+//                "Time" to time,
+//                "Label" to label,
+//                "Description" to description
+//            )
+//
+//            db.collection("reminder")
+//                .document(userId)
+//                .collection(userName)
+//                .add(reminder)
+//                .addOnSuccessListener { documentReference ->
+//                    // Handle success
+//                    Toast.makeText(this, "Reminder saved successfully!", Toast.LENGTH_SHORT).show()
+//                    finish()
+//                }
+//                .addOnFailureListener { e ->
+//                    // Handle failures
+//                    Toast.makeText(this, "Failed to save reminder!", Toast.LENGTH_SHORT).show()
+//                }
+//        } else {
+//            // User is not authenticated or user's UID is null
+//            Toast.makeText(this, "User not authenticated!", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 }
