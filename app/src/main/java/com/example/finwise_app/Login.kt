@@ -207,6 +207,7 @@ class Login : AppCompatActivity() {
     private fun navigateToExpenseScreen() {
         val intent = Intent(this, Navigation::class.java)
         startActivity(intent)
+        finish()
     }
 
 

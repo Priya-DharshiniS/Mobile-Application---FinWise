@@ -15,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import androidx.core.app.NotificationManagerCompat
 import android.content.Intent
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import java.util.*
 
@@ -24,6 +26,10 @@ class profile : Fragment() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var currentUser: FirebaseUser
     private val db = FirebaseFirestore.getInstance()
+    private lateinit var addIncomeEditText: EditText
+    private lateinit var addBudgetEditText: EditText
+    private lateinit var totalSavingsEditText: EditText
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,11 +46,10 @@ class profile : Fragment() {
         val addBudgetEditText = view.findViewById<EditText>(R.id.AddBudget)
         val totalSavingsEditText = view.findViewById<EditText>(R.id.TotalSavings)
         val saveButton = view.findViewById<Button>(R.id.Savebtn)
-        val logoutButton = view.findViewById<Button>(R.id.LogoutBtn)
 
 
-        hiTextView.text = "Hi ${currentUser.displayName} !!!"
-        fetchFinanceData(addIncomeEditText, addBudgetEditText,totalSavingsEditText)
+        hiTextView.text = "Hi ${currentUser.displayName}"
+        fetchFinanceData(addIncomeEditText, addBudgetEditText, totalSavingsEditText)
 
         saveButton.setOnClickListener {
             // Ensure views are not null before accessing them
@@ -60,21 +65,24 @@ class profile : Fragment() {
             // Call function to update Firestore
             updateFinanceData(income, budget, savings)
         }
+        val editSymbol: ImageView = view.findViewById(R.id.edit_symbol)
 
-        logoutButton.setOnClickListener {
-            SessionManager.clearSession(requireContext())
-
-            // Navigate the user to the login screen
-            val intent = Intent(requireContext(), Login::class.java)
-            startActivity(intent)
-
-            // Finish the current activity to prevent the user from navigating back to it using the back button
-            requireActivity().finish()
+        editSymbol.setOnClickListener {
+            // Start Profile_Edit activity when the edit_symbol ImageView is clicked
+            val intent = Intent(requireContext(), Profile_Edit::class.java)
+            startActivityForResult(intent, PROFILE_EDIT_REQUEST_CODE)
         }
+
+//        Call updateSavingsAndResetBudgetAtEndOfMonth if it's the last day of the month
+//        val calendar = Calendar.getInstance()
+//        if (isLastDayOfMonth(calendar)) {
+//            updateSavingsAndResetBudgetAtEndOfMonth()
+//        }
 
 
         return view
     }
+
     private fun fetchFinanceData(
         addIncomeEditText: EditText,
         addBudgetEditText: EditText,
@@ -154,11 +162,15 @@ class profile : Fragment() {
                         .addOnSuccessListener {
                             // Handle success
                             Log.d(TAG, "Finance data updated successfully")
+                            // Show toast message
+                            Toast.makeText(
+                                requireContext(),
+                                "Finance data updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             // Check if spending exceeds budget
                             if (spending > budget) {
                                 // Send notification
-
-
                                 sendNotification("You have exceeded your budget!")
                             }
                         }
@@ -177,6 +189,45 @@ class profile : Fragment() {
             }
     }
 
+    private fun isLastDayOfMonth(calendar: Calendar): Boolean {
+        val lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val today = calendar.get(Calendar.DAY_OF_MONTH)
+        return today == lastDay
+    }
+//    private fun updateSavingsAndResetBudgetAtEndOfMonth() {
+//        val calendar = Calendar.getInstance()
+//        val year = calendar.get(Calendar.YEAR).toString()
+//        val month = SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.time)
+//
+//        // Fetch income, budget, and current savings from UI
+//        val income = addIncomeEditText.text.toString().toDoubleOrNull() ?: 0.0
+//        val budget = addBudgetEditText.text.toString().toDoubleOrNull() ?: 0.0
+//        val currentSavings = totalSavingsEditText.text.toString().toDoubleOrNull() ?: 0.0
+//
+//        // Calculate savings
+//        val savings = income - budget
+//
+//        // Update savings in Firestore
+//        val financeDocRef = firestore.collection("users")
+//            .document(currentUser.uid)
+//            .collection("finance")
+//            .document(year)
+//            .collection(month)
+//            .document("fin")
+//
+//        financeDocRef.update("savings", currentSavings + savings)
+//            .addOnSuccessListener {
+//                Log.d(TAG, "Savings updated successfully for the end of the month")
+//                // Update savings field in UI
+//                Toast.makeText(requireContext(), "Savings updated successfully for the end of the month", Toast.LENGTH_SHORT).show()
+//                // Show toast message
+//                totalSavingsEditText.setText((currentSavings + savings).toString())
+//            }
+//            .addOnFailureListener { e ->
+//                Log.e(TAG, "Error updating savings at the end of the month", e)
+//            }
+//    }
+
     private fun sendNotification(message: String) {
         val notificationId = 1
         val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
@@ -192,10 +243,11 @@ class profile : Fragment() {
             notify(notificationId, builder.build())
         }
     }
+
     companion object {
         private const val TAG = "ProfileFragment"
         private const val CHANNEL_ID = "100"
+        private const val PROFILE_EDIT_REQUEST_CODE=101
 
     }
-
 }

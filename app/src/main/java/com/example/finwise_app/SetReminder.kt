@@ -1,7 +1,10 @@
 package com.example.finwise_app
 
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -11,6 +14,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.Context
+import android.os.Build
+import android.util.Log
+import android.widget.ImageView
+import java.text.ParseException
+
 
 class SetReminder : AppCompatActivity() {
 
@@ -19,9 +28,10 @@ class SetReminder : AppCompatActivity() {
     private lateinit var labelEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var saveButton: Button
+    private lateinit var backButton:ImageView
 
     private val db = FirebaseFirestore.getInstance()
-
+    private var reminderId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_reminder)
@@ -32,6 +42,24 @@ class SetReminder : AppCompatActivity() {
         labelEditText = findViewById(R.id.labelEditText)
         descriptionEditText = findViewById(R.id.descriptionEditText)
         saveButton = findViewById(R.id.setButton)
+        backButton=findViewById(R.id.backButton)
+
+
+        if (intent.hasExtra("reminderId")) {
+            // Retrieve reminder details from intent extras
+            reminderId = intent.getStringExtra("reminderId")
+            val label = intent.getStringExtra("label")
+            val date = intent.getStringExtra("date")
+            val time = intent.getStringExtra("time")
+            val description = intent.getStringExtra("description")
+
+
+            // Prepopulate EditTexts with reminder details
+            labelEditText.setText(label)
+            dateEditText.setText(date)
+            timeEditText.setText(time)
+            descriptionEditText.setText(description)
+        }
 
         // Set OnClickListener for dateEditText to show DatePickerDialog
         dateEditText.setOnClickListener {
@@ -45,9 +73,14 @@ class SetReminder : AppCompatActivity() {
 
         // Set OnClickListener for saveButton
         saveButton.setOnClickListener {
-           // saveReminderToFirestore()
+            saveReminderToFirestore()
+        }
+        backButton.setOnClickListener {
+            // Navigate back to the previous page
+            onBackPressed()
         }
     }
+
 
     private fun showDatePicker() {
         val currentDate = Calendar.getInstance()
@@ -88,43 +121,127 @@ class SetReminder : AppCompatActivity() {
         timePicker.show()
     }
 
-//    private fun saveReminderToFirestore() {
-//        // You can perform validation here if necessary
-//
-//        // Continue with saving the reminder to Firestore
-//        val time = timeEditText.text.toString().trim()
-//        val label = labelEditText.text.toString().trim()
-//        val description = descriptionEditText.text.toString().trim()
-//
-//        // Get the current user's UID and name
-//        val currentUser = FirebaseAuth.getInstance().currentUser
-//        val userId = currentUser?.uid
-//        val userName = currentUser?.displayName
-//
-//        if (userId != null && userName != null) {
-//            val reminder = hashMapOf(
-//                "Date" to dateEditText.text.toString().trim(),
-//                "Time" to time,
-//                "Label" to label,
-//                "Description" to description
-//            )
-//
-//            db.collection("reminder")
-//                .document(userId)
-//                .collection(userName)
-//                .add(reminder)
-//                .addOnSuccessListener { documentReference ->
-//                    // Handle success
-//                    Toast.makeText(this, "Reminder saved successfully!", Toast.LENGTH_SHORT).show()
-//                    finish()
-//                }
-//                .addOnFailureListener { e ->
-//                    // Handle failures
-//                    Toast.makeText(this, "Failed to save reminder!", Toast.LENGTH_SHORT).show()
-//                }
-//        } else {
-//            // User is not authenticated or user's UID is null
-//            Toast.makeText(this, "User not authenticated!", Toast.LENGTH_SHORT).show()
-//        }
-//    }
+    private fun saveReminderToFirestore() {
+        // You can perform validation here if necessary
+
+        // Continue with saving the reminder to Firestore
+        val time = timeEditText.text.toString().trim()
+        val label = labelEditText.text.toString().trim()
+        val description = descriptionEditText.text.toString().trim()
+
+        // Get the current user's UID and name
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid
+        val userName = currentUser?.displayName
+
+        if (userId != null && userName != null) {
+            val reminder = hashMapOf(
+                "Date" to dateEditText.text.toString().trim(),
+                "Time" to time,
+                "Label" to label,
+                "Description" to description
+            )
+
+            val collection = db.collection("reminder")
+                .document(userId)
+                .collection(userName)
+
+
+            if (reminderId != null) {
+                // Update existing reminder
+                collection.document(reminderId!!)
+                    .update(reminder as Map<String, Any>)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Reminder updated successfully!", Toast.LENGTH_SHORT).show()
+                        scheduleAlarm(dateEditText.text.toString().trim(), time, label,description, reminderId!!)
+                        finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Failed to update reminder!", Toast.LENGTH_SHORT).show()
+                        Log.e("SetReminder", "Error updating reminder", e)
+                    }
+            } else {
+                // Add new reminder
+                collection.add(reminder)
+                    .addOnSuccessListener { documentReference ->
+                        Toast.makeText(this, "Reminder saved successfully!", Toast.LENGTH_SHORT).show()
+                        scheduleAlarm(dateEditText.text.toString().trim(), time, label, description,documentReference.id)
+                        finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Failed to save reminder!", Toast.LENGTH_SHORT).show()
+                        Log.e("SetReminder", "Error saving reminder", e)
+                    }
+            }
+        } else {
+            // User is not authenticated or user's UID is null
+            Toast.makeText(this, "User not authenticated!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+
+    private fun scheduleAlarm(date: String, time: String, label: String,description:String, reminderId: String) {
+        val dateTimeStr = "$date $time"
+        val sdf = SimpleDateFormat("MMMM dd, yyyy hh:mm a", Locale.getDefault())
+
+
+        try {
+            val dateTime = sdf.parse(dateTimeStr)
+            if (dateTime != null) {
+                val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+                val intent = Intent(this, AlarmReceiver::class.java).apply {
+                    putExtra("label", label)
+                    putExtra("description", description)
+                    putExtra("reminderId", reminderId)
+                }
+
+
+                val pendingIntent = PendingIntent.getBroadcast(
+                    this,
+                    reminderId.hashCode(),
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                )
+
+
+                // Check if the app can schedule exact alarms
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val canScheduleExact = alarmManager.canScheduleExactAlarms()
+                    if (!canScheduleExact) {
+                        // Handle the case where the app cannot schedule exact alarms
+                        Toast.makeText(this, "Cannot schedule exact alarms", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                }
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        dateTime.time,
+                        pendingIntent
+                    )
+                } else {
+                    alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        dateTime.time,
+                        pendingIntent
+                    )
+                }
+                val formattedDateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(dateTime)
+                Log.d("SetReminder", "Alarm scheduled for $formattedDateTime")
+                Toast.makeText(this, "Alarm scheduled for $formattedDateTime", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Invalid date/time format!", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: ParseException) {
+            Toast.makeText(this, "Error parsing date/time!", Toast.LENGTH_SHORT).show()
+        }
+    }
+    override fun onBackPressed() {
+        // Handle the back button press by navigating back to the previous screen
+        super.onBackPressed()
+    }
 }

@@ -7,18 +7,39 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/finwiselogo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/finwiselogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinWise_App"
         tools:targetApi="31">
+        <activity
+            android:name=".Profile_Edit"
+            android:exported="false" />
+        <activity
+            android:name=".DailyFetchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WeeklyFetchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChooseChartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FetchActivity"
+            android:exported="false" />
         <activity
             android:name=".Pie"
             android:exported="false" />
@@ -54,18 +75,45 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
+
         <receiver
             android:name=".AlarmReceiver"
+            android:enabled="true"
             android:exported="false">
 
             <!-- Define the intent filter for receiving broadcast intents -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="com.example.finwise_app.ACTION_ALARM_TRIGGER" />
+                <action android:name="com.example.finwise_app.ACTION_ALARM_STOP" />
+
                 <!-- Add any other necessary actions -->
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".AlarmService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.phonepe.android.sdk.isUAT"
+            android:value="true" />
+        <meta-data
+            android:name="com.phonepe.android.sdk.isSimulator"
+            android:value="true" />
+        <meta-data
+            android:name="com.phonepe.android.sdk.MerchantId"
+            android:value="merchantId" />
+        <meta-data
+            android:name="com.phonepe.android.sdk.AppId"
+            android:value="appId" />
     </application>
 
 </manifest>

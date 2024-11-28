@@ -33,12 +33,10 @@ class Navigation : AppCompatActivity() {
                     loadFragment(ExpenseActivity(), supportFragmentManager)
                     true
                 }
-
                 R.id.nav_graph -> {
-                    loadFragment(Pie(), supportFragmentManager)
+                    loadFragment( ChooseChartActivity(), supportFragmentManager)
                     true
                 }
-
                R.id.nav_remainder -> {
                    loadFragment(reminder_log(), supportFragmentManager)
                     true
